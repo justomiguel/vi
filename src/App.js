@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Filter from './components/Filter';
+import Map from './components/Map';
+import properties from './properties.json';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [filteredProperties, setFilteredProperties] = useState(properties);
+
+    const handleFilter = (field, value) => {
+        const filtered = properties.filter((property) => {
+            if (field === 'precio' || field === 'cantPiezas') {
+                return property[field] === parseInt(value);
+            } else {
+                return property[field].toLowerCase().includes(value.toLowerCase());
+            }
+        });
+        setFilteredProperties(filtered);
+    };
+
+    return (
+        <div>
+            <Filter handleFilter={handleFilter} />
+            <Map properties={filteredProperties} />
+        </div>
+    );
+};
 
 export default App;
